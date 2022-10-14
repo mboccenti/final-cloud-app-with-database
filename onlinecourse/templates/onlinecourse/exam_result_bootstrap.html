@@ -35,20 +35,47 @@
     </div>
 </nav>
 
-<div class="container-fluid">
-    {% if grade > 80 %}
-    <div class="alert alert-success">
-       <!--HINT Display passed info -->
-    </div>
+    <div class="container-fluid">
+        {% if grade > 80 %}
+        <div class="alert alert-success">
+            <span class="fw-bolder">Congratulations, {{ user.first_name }}!</span> You have passed the exam and completed the course with score of {{ grade }}/100.
+        </div>
         {% else %}
         <div class="alert alert-danger">
-            <!--HINT Display failed info -->
+            <span class="fw-bolder">Failed</span> Sorry, {{ user.first_name }}!  You have failed the exam with score of {{ grade }}/100.
         </div>
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
         {% endif %}
+
         <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <!--HINT Display exam results-->
+            <h5 class="">Exam results</h5>
+            <!--... for each question in the course ... -->
+            {% for question in course.question_set.all %}
+            <div class="card mt-1">
+                <div class="card-header"><h5>{{ question.text }}</h5></div>
+                <div class="form-group">
+                    <!--... for each choice in the question ...-->
+                    {% for choice in question.choice_set.all %}
+                    <div class="form-check">
+                        {% if choice.is_correct %}
+                            {% if choice in choices %}
+                                <div class="text-success">Correct answer: {{ choice.text }}</div>
+                            {% else %}
+                                <div class="text-warning">Not selected: {{ choice.text }}</div>
+                            {% endif %}
+                        {% else %}
+                            {% if choice in choices %}
+                                <div class="text-danger">Wrong answer: {{ choice.text }}
+                            {% else %}
+                                <div>{{ choice.text }}</div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </body>

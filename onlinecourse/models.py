@@ -62,7 +62,7 @@ class Course(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Enrollment')
     total_enrollment = models.IntegerField(default=0)
     is_enrolled = False
-
+ 
     def __str__(self):
         return "Name: " + self.name + "," + \
                "Description: " + self.description
@@ -138,5 +138,4 @@ class Choice(models.Model):
 class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
- 
-    # Other fields and methods you would like to design
+#    Other fields and methods you would like to design
